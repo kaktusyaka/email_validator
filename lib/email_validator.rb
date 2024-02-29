@@ -4,7 +4,7 @@
 class EmailValidator < ActiveModel::EachValidator
   # rubocop:disable Style/ClassVars
   @@default_options = {
-    :allow_nil => false,
+    :allow_blank => false,
     :domain => nil,
     :require_fqdn => nil,
     :mode => :loose
@@ -25,8 +25,8 @@ class EmailValidator < ActiveModel::EachValidator
 
     def valid?(value, options = {})
       options = parse_options(options)
-      return true if value.nil? && options[:allow_nil] == true
-      return false if value.nil?
+      return true if value.blank? && options[:allow_blank] == true
+      return false if value.blank?
       # quickly fail if domain is required but doesn't match
       return false unless options[:domain].nil? || value[/^.*@#{regexp_safe_domain(options)}$/]
       !!(value =~ regexp(options))
